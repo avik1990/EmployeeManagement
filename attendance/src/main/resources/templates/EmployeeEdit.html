@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.com" layout:decorate="_layout">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<title>Employee Portal</title>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="designation">Designation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="country">Add Country</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="state">Add State</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="employeeList">Employee List</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+</head>
+<body>
+<form class="row g-3" th:action="@{/addemployee}" method="post">
+<div class="container my-5 p-5" style="border:1px solid black;">
+ <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">First Name</label>
+    <input type="text" th:value="${employee.getFname}" name="fname" class="form-control" id="inputEmail4">
+  </div>
+
+  
+  <div class="col-md-6">
+
+ 	   
+   <input type="text" class="form-control" th:value="${employee.getEmployeeId}" name="employeeId"
+                                               readonly placeholder="Id">
+  </div>
+  
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Last Name</label>
+    <input type="text" th:value="${employee.getLname}" name="lname" class="form-control" id="inputEmail4">
+  </div>
+  
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Aadhar</label>
+    <input type="text" th:value="${employee.getAadhar}" name="aadhar" class="form-control" id="inputEmail4">
+  </div>
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Pan</label>
+    <input type="text" th:value="${employee.getPan}" name="pan" class="form-control" id="inputEmail4">
+  </div>
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Email</label>
+    <input type="email" th:value="${employee.getEmail}" name="email" class="form-control" id="inputEmail4">
+  </div>
+  <div class="col-md-6">
+    <label for="inputPassword4" class="form-label">Password</label>
+    <input type="password" th:value="${employee.getPassword}" name="password" class="form-control" id="inputPassword4">
+  </div>
+   <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Date of Joining</label>
+      <input type="date" th:value="${employee.getDate_of_joining}" name="dateof_joining" onfocus="this.showPicker()">
+  </div>
+  
+  <div class="col-md-6">
+    <label for="inputEmail4" class="form-label">Date of Birth</label>
+      <input type="date" th:value="${employee.getDate_of_birth}" name="dateof_birth" onfocus="this.showPicker()">
+  </div>
+   <div class="col-md-4">
+    <select id="inputState" name="designationInfo" class="form-select">
+     <option value="0">Select Designation</option>
+    <option th:each="d :${desigList}"
+	    th:value="${d.getID()}"
+	    th:selected="${d.getID()} == ${employee.designationInfo.getID()}?True: False"
+		th:text="${d.getDesignation_name()}">
+    </select>
+  </div>
+</table>
+  <div class="col-12">
+    <label for="inputAddress" class="form-label">Address</label>
+    <input type="text" th:value="${employee.getAddressLine1}" name="addressLine1" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div>
+  <div class="col-12">
+    <label for="inputAddress2" class="form-label">Address 2</label>
+    <input type="text" th:value="${employee.getAddressLine2}" name="addressLine2" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="col-md-6">
+    <label for="inputCity" class="form-label">City</label>
+    <input type="text" name="city" th:value="${employee.getCity}" class="form-control" id="inputCity">
+  </div>
+  <div class="col-md-4">
+    <select id="ddlCountryAdd" name="country" class="form-select">
+     <option th:value="${null}">-SELECT Country-</option>
+    <option th:each="b :${countryList}"
+	    th:value="${b.getID()}"
+	    th:selected="${b.getID()} == ${employee.country.getID()}?True: False"
+		th:text="${b.getCountry_name()}">
+    </select> 
+  </div>
+  
+  
+  <div class="col-md-4">
+    <select id="ddlStateAdd" name="state" class="form-select">
+    <option th:value="${null}">-SELECT-</option>
+           <option th:each="state : ${states}"
+                                    th:value="${state.getID()}"
+                                    th:selected="${state.getID()} == ${employee.state.getID()}?True: False"
+                                    th:text="${state.state_name}">
+           </option>
+    </select> 
+  </div>
+  <div class="col-md-2">
+    <label for="inputZip" class="form-label">Zip</label>
+    <input type="text" th:value="${employee.getZip}" name="zip" class="form-control" id="inputZip">
+  </div>
+
+  <div class="col-12  my-3">
+    <button type="submit" class="btn btn-primary">Register</button>
+  </div>
+  </div>
+</form>
+
+<th:block layout:fragment="script">
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+    <script language="JavaScript">
+        $('document').ready(function () { 
+
+            $('#ddlCountryAdd').on('change',function () { 
+                console.log("I got here!")
+			
+                $('#ddlStateAdd').empty().append('<option value="null">-SELECT1-</option>'); 
+
+                var countryid = $(this).val(); 
+				if(countryid!= null){
+					 var href = "http://localhost:1001/parameters/country/" + countryid 
+		                console.log(href)
+		                $.get(href, function (country, status) { 
+
+		                    var states = country.states;
+
+		                    for (var i = 0; i <= states.length-1; i++) { 
+		                        $('#ddlStateAdd').append('<option value="' + states[i].id + '">' + states[i].state_name + '</option>'); // Line 9
+		                    }
+		                })
+				}
+               
+            })
+
+        })
+    </script>
+</th:block>
+
+
+</body>
+</html>
